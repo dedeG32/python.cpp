@@ -1,0 +1,1 @@
+This program has been done before learning about computer language. This reflects my understanding and best estimation on how a programming language work under the hood.
