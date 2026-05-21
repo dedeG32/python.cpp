@@ -45,12 +45,20 @@ void test_is_number(string nbr){
     cout<< nbr <<" is a number : "<< Utils::isNumber(nbr)<< endl;
 }
 
+void test_string_concatenation(){
+    string h = "hello";
+    h += 'g';
+    cout<<h<<endl;
+}
+
 int main(){
     cout << "hello world" << endl;
     //test_lower();
     //test_getline();
     //test_cin_int_string();
     //str_to_int();
-    test_is_number("1_000_000.22");
+    //test_is_number("1_000_000.22");
+    //if(nullptr) cout<<"ggggggggggg"<<endl; //test nullptr as bool value
+    test_string_concatenation();
     return 0;
 }

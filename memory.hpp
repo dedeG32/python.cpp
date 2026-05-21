@@ -11,9 +11,14 @@
 ////Tree (choosen): This allow storage of only the data we need. No need to allocate space to non existing data.
                 // Cons, More complicated data structure to set up. Takes some time to traverse the tree if no reordering system is set up. 
                 // 
-
+////Map: Thought about it late. It provides quick access to variables. And doesn't preallocate memory space. It is a library so it shouldn't take much effort to implement.
 // DATA TYPE : To handle python property of not requirig data type at a variable specification we use any.
 // FUNCTION CALL : To simulate function stack we use vectors. After each function call we can pushback variable to memory. Those variables get poped after function return. 
+
+
+//TODO:
+//balance the tree after insertion
+//function stack handling in store
 
 
 #ifndef MEMORY_HPP
@@ -31,75 +36,131 @@
 
 using namespace std;
 
+class Node{
+    public:
+    vector<any> data;
+    int address;
+    Node* left  = nullptr;
+    Node* right = nullptr;
+    
+
+    Node(int address, any data){
+        this->address = address;
+        this->data.push_back(data);
+    }
+
+    void setRight(Node* right){
+        this->right = right;
+    }
+    void setleft(Node* left){
+        this->left = left;
+    }    
+};
 
 class Memory{
-    string min_valid_variabble_name = "a";
-    string max_valid_variabble_name = "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz";
-    int max_valid, min_valid;
+    //string min_valid_variabble_name = "a";
+    string max_valid_variabble_name = "zzzzzzzzzzz";
+    int max_valid;//, min_valid;
     Node* root = nullptr;
+    vector<vector<int>> function_stack;
 
 public:
     Memory()
     {
         this->max_valid = hash(this->max_valid_variabble_name);
-        this->min_valid = hash(this->min_valid_variabble_name);
+        //this->min_valid = hash(this->min_valid_variabble_name);
     }
 
-    void store(string adress, any data){
-        address = hash(address);
+    void store(string address, any data){
+        int int_address = hash(address);
+        ////////
+        //error handling / / / / ////   /  // / / / // // / / / // /// / / / /// /////// / /////// / // / / / // / / / / / / / / / / //
+        //////////
+        if(max_valid && ! valid_address(int_address)){ //check max lenght. can be disabled by setting max_valid_variable_name = "0"
+            cout<< "\033[33m variable name execeded maximum lenght of \033[0m" << max_valid_variabble_name<< endl;
+            return;
+        }
         if(root == nullptr){ //set root
-            root = node(adress, data);
+            root = new Node(int_address, data);
         }
-        else{
-            if(address == )
+        else{  //NOT YET IMPLEMENTED: should hadle function stack by aappending data instead of replacing it
+            Node* node = find(int_address, root);
+            if(node == nullptr)  node->address = int_address;
+            node->data.back() = data;
         }
+    }
+
+    //helper methode for print(Node) recurcive
+    void print(){
+        print(root);
     }
     
 private:
     void add(int address,any data){}
-    
     //uses a 36 number system (36 = 26 letters (a-z) + 10 numbers (0-9)). 
     //Memory is not case sensitive. Example: MyVariable == myvariable; both are stored in the same address.
-    //max_valid and min_valid represent the max variable lenght. min_valid_variable_name = "a", it implies that min_variable = 11. Numbers are not 
+    //max_valid and min_valid represent the max variable lenght. min_valid_variable_name = "a", it implies that min_variable = 10. Numbers are not 
     int hash(string address){
-        result = 0;
+        int result = 0;
         address = Utils::lower(address);
-        for(int exponent= 0; i<address.size() ; exponent++ )
-            result += char_hash_idx(address[i]) * pow(36, exponent);
+        for(int exponent= 0; exponent<address.size() ; exponent++ )
+            result += char_hash_idx(address[exponent]) * pow(36, exponent);
         return result;
+    }
+    
+    string unhash(int address){
+        int i= 1;
+        string result = "";
+        for(;i*36<address; i*=36);
+        for(int expo = 1 ; i>1 ; i%=36){
+            expo = address / i;
+            address %= i;
+            result += char_hash_idx(expo);
+        }
+        return result;
+
     }
 
     int char_hash_idx(char input){
         if(Utils::isNumber(input))
-            return input - '0'
-        return input - 'a' + 10 
+            return input - '0';
+        return input - 'a' + 10;
+    }
+    //reverse hashing
+    char char_hash_idx(int input){
+        if(input<10) return '0'+ input;
+        return 'a' +input - 10 ;
     }
 
     //
-    bool valid_address(){
+    bool valid_address(int address){
+        return address < this->max_valid;
+    }
 
+    Node* find(int address, Node* node){
+        if(node == nullptr) return node;
+
+        if( address > node->address)
+            return find(address, node->right);
+        if( address < node->address)
+            return find(address, node->left);
+        if(address == node->address){ //value already exists
+            return node;
+        }
+        return node;
+        
+    }
+
+    void print(const Node* node){
+        if(node->left)
+            print(node->left);
+        if(node->right)
+            print(node->right);
+
+        cout<< unhash(node->address) << endl;//" = "<<node->data << endl;
     }
 
 
+};
 
-}
-class Node{
-    vector<any> data;
-    int adress;
-    Node* left  = nullptr;
-    Node* right = nullptr;
-    
-public:
-    Node(int adress, any data){
-        this->adress = adress;
-        this->data.pushback(data);
-    }
-
-    void setRight(Node& right){
-        this->right = right;
-    }
-    void setleft(Node& left){
-        this->left = left;
-    }    
-}
 #endif
