@@ -37,14 +37,19 @@
 using namespace std;
 
 class Node{
+    //types that are saved 
+    //int   : for integers and booleon
+    //double: for dooble and floats
+    //vector: for python list
+    
     public:
     vector<any> data;
-    int address;
+    unsigned int address;
     Node* left  = nullptr;
     Node* right = nullptr;
     
 
-    Node(int address, any data){
+    Node(unsigned int address, any data){
         this->address = address;
         this->data.push_back(data);
     }
@@ -60,9 +65,10 @@ class Node{
 class Memory{
     //string min_valid_variabble_name = "a";
     string max_valid_variabble_name = "zzzzzzzzzzz";
-    int max_valid;//, min_valid;
+    unsigned int max_valid;//, min_valid;
     Node* root = nullptr;
     vector<vector<int>> function_stack;
+    enum valid_type{py_int, py_float, py_string ,py_list}; 
 
 public:
     Memory()
@@ -83,7 +89,7 @@ public:
         if(root == nullptr){ //set root
             root = new Node(int_address, data);
         }
-        else{  //NOT YET IMPLEMENTED: should hadle function stack by aappending data instead of replacing it
+        else{  //NOT YET IMPLEMENTED: should handle function stack by appending data instead of replacing it
             Node* node = find(int_address, root);
             if(node == nullptr)  node->address = int_address;
             node->data.back() = data;
@@ -96,27 +102,28 @@ public:
     }
     
 private:
-    void add(int address,any data){}
+    void add(unsigned int address,any data){}
     //uses a 36 number system (36 = 26 letters (a-z) + 10 numbers (0-9)). 
     //Memory is not case sensitive. Example: MyVariable == myvariable; both are stored in the same address.
     //max_valid and min_valid represent the max variable lenght. min_valid_variable_name = "a", it implies that min_variable = 10. Numbers are not 
     int hash(string address){
-        int result = 0;
+        unsigned int result = 0;
         address = Utils::lower(address);
         for(int exponent= 0; exponent<address.size() ; exponent++ )
-            result += char_hash_idx(address[exponent]) * pow(36, exponent);
+            result += char_hash_idx(address[exponent]) * pow(35, exponent);
         return result;
     }
     
-    string unhash(int address){
-        int i= 1;
+    string unhash(unsigned int address){
+        unsigned int i= 1;
         string result = "";
-        for(;i*36<address; i*=36);
-        for(int expo = 1 ; i>1 ; i%=36){
+        for(;i*35<address; i*=35);
+        for(unsigned int expo = 1 ; i>1 ; i%=35){
             expo = address / i;
             address %= i;
             result += char_hash_idx(expo);
         }
+        cout<<"unhash result is: "<< result<<endl;
         return result;
 
     }
@@ -127,9 +134,10 @@ private:
         return input - 'a' + 10;
     }
     //reverse hashing
-    char char_hash_idx(int input){
+    char char_hash_idx(unsigned int input){
         if(input<10) return '0'+ input;
         return 'a' +input - 10 ;
+        cout
     }
 
     //
@@ -159,7 +167,15 @@ private:
 
         cout<< unhash(node->address) << endl;//" = "<<node->data << endl;
     }
+        //supports 4 types
+    
+    static valid_type type_check(any data){
+        if (data.type() == typeid(int)) return py_int;
+        if (data.type() == typeid(float) || data.type() == typeid(double)) return 0x0010;
+        if (data.type() == typeid(string)) return 0x0001;
 
+            
+    }
 
 };
 
