@@ -113,25 +113,46 @@ void test_unsigned_longlong_overflow_limit(){
         if (test%1000000000000 == 0) cout<<test<<endl;
     }
     cout<<test--<< " and "<< test <<endl;
+
     
 }
 
-void test_remoce_dash(){
-    line();
-    cout<< Utils::remove_dash("_p_l_a_y_ _OP")<< endl;
+// void test_remoce_dash(){
+//     line();
+//     cout<< Utils::remove_dash("_p_l_a_y_ _OP")<< endl;
+// }
+//irelevant
+// void test_to_pyfloat(){
+//     line();
+//     double x = Utils::to_py_float("1.2");
+//     double y = Utils::to_py_float("11.3");
+//     cout<<x+y<<endl;
+// }
+// void test_to_pyint(){
+//     line();
+//     long  x = Utils::to_py_float("100"); //Note: even if it returns long long. long is enough to be accepted (no compiler error)
+//     long long y = Utils::to_py_float("1_23_0");
+//     cout<<x+y<<endl;
+// }
+
+void limit_of_long_long(){
+    unsigned long long x = 0;
+    x--;
+    long long y = x/2;
+    cout << "unsigned "<<x<< endl;
+    cout<< "signed :" << y<< endl;
+    for(int i=0; i<100; i++){
+        cout<< ++y<< endl;
+    }
 }
 
-void test_to_pyfloat(){
+void test_fix_number(){
     line();
-    double x = Utils::to_py_float("1.2");
-    double y = Utils::to_py_float("11.3");
-    cout<<x+y<<endl;
-}
-void test_to_pyint(){
-    line();
-    long  x = Utils::to_py_float("100"); //Note: even if it returns long long. long is enough to be accepted (no compiler error)
-    long long y = Utils::to_py_float("1_23_0");
-    cout<<x+y<<endl;
+    unsigned int dot_idx = 0;
+    long long sign= 0;
+    cout<< Utils::fix_number("-1_000_000.1", sign, dot_idx)<< endl;
+    cout<< "sign = "<< sign<< endl;
+    cout<< "dot_idx = "<< dot_idx<< endl;
 }
 int main(){
     cout << "hello world" << endl;
@@ -151,8 +172,13 @@ int main(){
         //test_unsigned_longlong_overflow_limit();
 
     //test_remoce_dash();
-    test_to_pyfloat();
-    test_to_pyint();
+    //test_to_pyfloat();
+    //test_to_pyint();
+
+    //limit_of_long_long();
+
+    test_fix_number();
+
 
     return 0;
 }

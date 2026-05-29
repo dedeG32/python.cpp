@@ -167,14 +167,13 @@ private:
 
         cout<< unhash(node->address) << endl;//" = "<<node->data << endl;
     }
-        //supports 4 types
-    
+        
+    //supports 4 types (py_int -> long long), (py_float -> double), (py_list -> vector), (py_string -> string)
     static valid_type type_check(any data){
         if (data.type() == typeid(int)) return py_int;
-        if (data.type() == typeid(float) || data.type() == typeid(double)) return 0x0010;
-        if (data.type() == typeid(string)) return 0x0001;
-
-            
+        if (data.type() == typeid(float) || data.type() == typeid(double)) return py_float;
+        if (data.type() == typeid(string)) return py_string;
+        if (data.type() == typeid(vector)) return py_list;
     }
 
 };
