@@ -52,7 +52,7 @@ public:
             negative = true;
             input = input.substr(1,input.length());
         }
-        cout<<"input is : "<<input<<endl;
+        //cout<<"input is : "<<input<<endl;
         for (char nbr : input){ 
             if(!isNumber(nbr)){
                 cout<<nbr<<endl;
@@ -108,12 +108,34 @@ public:
     //     return result;
     // }
 ///////////////////////
-    static string fix_number(string input, bool remove_dash = true, bool remove_sign = true, bool remove_dot = true){
+    static string add_zeros_to_ends(const string& str ,unsigned long long nbr_front=0, unsigned long long nbr_back=0){ //nbr_front, nbr_back represent number of zeros to add to front and end od string
+        string result = "";
+        for(int i=0;i<nbr_front;i++) result += "0";
+        result += str;
+        for(int i=0;i<nbr_back;i++) result += "0";
+        return result;
+    }
+    static string remove_zeros_from_ends(const string& nbr, unsigned long long& dot_idx){
+        int front_crop = 0;
+        int back_crop = nbr.size()-1;
+        for(; nbr[front_crop]=='0' && back_crop> front_crop ; front_crop++);
+        for(; nbr[back_crop] =='0' && back_crop> front_crop ; back_crop--) dot_idx--;
+        return back_crop == front_crop ? "0" : nbr.substr(front_crop, back_crop - front_crop +1);
+    }
+
+    static string fix_number(const string& input, bool remove_dash = true, bool remove_sign = true, bool remove_dot = true){
         long long sign = 0;
-        unsigned int dot_idx =0;
+        int dot_idx =0;
         return fix_number(input, sign, dot_idx, remove_dash, remove_sign, remove_dot);
     }
-    static string fix_number(string input, long long& sign, unsigned int& dot_idx, bool remove_dash = true, bool remove_sign = true, bool remove_dot = true){
+    //this because I went from a number represented Py_number to a string representation. recycling this methode to fit the new Py_number
+    static string fix_number(const string& input, bool& sign, int& dot_idx, bool remove_dash = true, bool remove_sign = true, bool remove_dot = true){
+           long long sign_old = 0; 
+           string result =  fix_number(input, sign_old, dot_idx, remove_dash, remove_sign, remove_dot);
+           sign = sign_old ==0 ? false : true; 
+           return result;
+    }   
+    static string fix_number(const string& input, long long& sign, int& dot_idx, bool remove_dash = true, bool remove_sign = true, bool remove_dot = true){
             string result= "";
             for(int i=0; i<input.size(); i++){
                 if(remove_dash && input[i]=='_') continue; //skip, do nothing

@@ -49,8 +49,9 @@ void test_is_number(string nbr){
 }
 
 void test_string_concatenation(){
-    string h = "hello";
-    h += 'g';
+    string h = "hello ";
+    h += 'D';
+    h += " with string";
     cout<<h<<endl;
 }
 
@@ -146,13 +147,35 @@ void limit_of_long_long(){
     }
 }
 
-void test_fix_number(){
+// void test_fix_number(){
+//     line();
+//     unsigned int dot_idx = 0;
+//     long long sign= 0;
+//     cout<< Utils::fix_number("-1_000_000.1", sign, dot_idx)<< endl;
+//     cout<< "sign = "<< sign<< endl;
+//     cout<< "dot_idx = "<< dot_idx<< endl;
+// }
+
+void for_the_loop(){  //test if i becomes 11 or 10
     line();
-    unsigned int dot_idx = 0;
-    long long sign= 0;
-    cout<< Utils::fix_number("-1_000_000.1", sign, dot_idx)<< endl;
-    cout<< "sign = "<< sign<< endl;
-    cout<< "dot_idx = "<< dot_idx<< endl;
+    int i = 0;
+    for(; i< 10 ; i++);
+    cout<< i <<endl;
+}
+
+void overflow_convertion(){
+    line();
+    cout<<"in"<<endl;
+    string hello = "f";
+    int x = stoi(hello);
+    cout<<x<<endl;
+
+}
+void bool_as_number(){
+    line();
+    bool test = false;
+    int nbr = 10;
+    cout<< nbr+test<<endl;
 }
 int main(){
     cout << "hello world" << endl;
@@ -162,7 +185,7 @@ int main(){
     //str_to_int();
     //test_is_number("-.");
     //if(nullptr) cout<<"ggggggggggg"<<endl; //test nullptr as bool value
-    //test_string_concatenation();
+    test_string_concatenation();
 
         //test_int_overflow_limit();
         //test_usigned_int_overflow_limit();
@@ -177,7 +200,13 @@ int main(){
 
     //limit_of_long_long();
 
-    test_fix_number();
+    //test_fix_number();
+
+    //for_the_loop();
+
+    //overflow_convertion();
+
+    //bool_as_number();
 
 
     return 0;
